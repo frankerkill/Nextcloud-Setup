@@ -1,0 +1,68 @@
+#!/bin/bash
+# Nextcloud omgeving installeren
+
+# installeren van AMP stack (Apache, MySql en Php)
+
+sudo apt update
+sudo apt install apache2 
+sudo apt install mysql-server
+
+# Inloggen Mysql
+
+sudo mysql -u root -p
+
+# Database en user aanmaken in mysql
+
+create database nextcloud;
+create user 'nextcloud'@'localhost' identified by 'frank';
+
+# user toegang geven tot de nieuwe database
+
+grant all privileges on nextcloud.* to 'nextcloud'@'localhost';
+flush privileges;
+quit
+
+# download en het installeren van PHP
+
+sudo apt install php7.4
+sudo apt install php7.4-gd php7.4-mysql php7.4-curl php7.4-mbstring
+sudo apt install php7.4-intl php7.4-gmp php7.4-bcmath php7.4-xml
+sudo apt install php7.4-zip php-imagick php-apcu
+
+# downloaden en installeren nextcloud
+
+wget https://download.nextcloud.com/server/releases/nextcloud-21.0.2.zip
+
+# unzip installatie voor uitpakken van nextloud 
+
+sudo apt install unzip
+
+# installeren nextcloud in juiste folder zodat apache hier toegang voor heeft
+
+sudo unzip nextcloud-21.0.2.zip -d /var/www
+
+# rechten van de folder goed zetten
+
+cd /var/www
+sudo chown -R www-data:www-data nextcloud/ 
+
+# installeren benodigde apache2 modules 
+
+sudo a2enmod headers env dir mime
+
+cd /etc/apache2/sites-available
+sudo nano000-default.conf
+
+# file aanpassen (file nog in script zetten)
+  
+# Restarten van apache om de file te refreshen, als dit goed gaat is de file correct aangepast. Zo niet dan moet je hier waarschijnlijk iets aan veranderen.
+
+sudo service apache2 restart
+
+# Nu zou je in kunnen loggen op je nextcloud omgeving, typ hiervoor je ip-adres in je browser
+
+# Om nextcloud te activeren dien je een admin account met wachtwoord aan te maken evenals het invullen de gegevens van je database en user.
+
+
+
+
